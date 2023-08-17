@@ -1,6 +1,5 @@
 const express = require('express');
 const captureScreenshot = require('./screenshot');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
