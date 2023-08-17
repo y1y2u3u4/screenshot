@@ -1,5 +1,5 @@
 const express = require('express');
-const captureAndRecognize = require('./screenshot');
+const captureScreenshot = require('./screenshot');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,10 +12,16 @@ app.get('/capture', async (req, res) => {
     }
 
     try {
-        const prices = await captureAndRecognize(url);
-        res.send({ prices });
+        const base64Image = await captureScreenshot(url);
+        
+        // 解码Base64图像数据
+        const imageBuffer = Buffer.from(base64Image, 'base64');
+
+        // 设置Content-Type为图像，并发送图像数据
+        res.header('Content-Type', 'image/png').send(imageBuffer);
+        
     } catch (error) {
-        res.status(500).send({ error: 'Error capturing and recognizing the URL content.' });
+        res.status(500).send({ error: 'Error capturing the URL content.' });
     }
 });
 
